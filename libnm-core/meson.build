@@ -234,8 +234,8 @@ libnm_libnm_core_aux_dep = declare_dependency(
   link_with: libnm_libnm_core_aux,
 )
 
-libnm_keyfile = static_library(
-  'nm-keyfile',
+libnm_keyfile_core = static_library(
+  'nm-keyfile-core',
   sources: nm_keyfile_source + [libnm_core_enum_sources[1]],
   dependencies: libnm_utils_base_dep,
   c_args: [
@@ -249,7 +249,7 @@ libnm_keyfile_dep = declare_dependency(
   sources: [libnm_core_enum_sources[1], nm_version_macro_header],
   include_directories: [libnm_core_inc, shared_inc],
   dependencies: glib_dep,
-  link_with: libnm_keyfile,
+  link_with: libnm_keyfile_core,
 )
 
 enums_to_docbook = join_paths(source_root, 'tools', 'enums-to-docbook.pl')
