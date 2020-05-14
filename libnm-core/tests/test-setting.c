@@ -1695,7 +1695,7 @@ test_ethtool_coalesce (void)
 	g_assert_true (nm_setting_option_get_uint32 (NM_SETTING (s_ethtool), NM_ETHTOOL_OPTNAME_COALESCE_TX_FRAMES, &u32));
 	g_assert_cmpuint (u32, ==, 8);
 
-	nm_setting_ethtool_clear_coalesce_all (s_ethtool);
+	nm_setting_ethtool_clear_coalesces (s_ethtool);
 	g_assert_false (nm_setting_option_get_uint32 (NM_SETTING (s_ethtool), NM_ETHTOOL_OPTNAME_COALESCE_RX_FRAMES, NULL));
 	g_assert_false (nm_setting_option_get_uint32 (NM_SETTING (s_ethtool), NM_ETHTOOL_OPTNAME_COALESCE_TX_FRAMES, NULL));
 	g_assert_false (nm_setting_option_get_uint32 (NM_SETTING (s_ethtool), NM_ETHTOOL_OPTNAME_COALESCE_TX_USECS, NULL));

@@ -204,7 +204,7 @@ nm_setting_ethtool_init_features (NMSettingEthtool *setting,
 }
 
 /**
- * nm_setting_ethtool_clear_coalesce_all:
+ * nm_setting_ethtool_clear_coalesces:
  * @setting: the #NMSettingEthtool
  *
  * Clears all coalesce settings
@@ -212,7 +212,7 @@ nm_setting_ethtool_init_features (NMSettingEthtool *setting,
  * Since: 1.26
  */
 void
-nm_setting_ethtool_clear_coalesce_all (NMSettingEthtool *setting)
+nm_setting_ethtool_clear_coalesces (NMSettingEthtool *setting)
 {
 	g_return_if_fail (NM_IS_SETTING_ETHTOOL (setting));
 

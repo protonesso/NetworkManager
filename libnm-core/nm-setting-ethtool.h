@@ -139,7 +139,7 @@ NM_AVAILABLE_IN_1_14
 void              nm_setting_ethtool_clear_features (NMSettingEthtool *setting);
 
 NM_AVAILABLE_IN_1_26
-void              nm_setting_ethtool_clear_coalesce_all (NMSettingEthtool *setting);
+void              nm_setting_ethtool_clear_coalesces (NMSettingEthtool *setting);
 
 G_END_DECLS
 
