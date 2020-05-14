@@ -4104,32 +4104,30 @@ _get_fcn_ethtool (ARGS_GET_FCN)
 	RETURN_UNSUPPORTED_GET_TYPE ();
 
 	if (nm_ethtool_id_is_coalesce (ethtool_id)) {
-		if (!nm_setting_ethtool_get_coalesce (NM_SETTING_ETHTOOL (setting),
-		                                      nm_ethtool_data[ethtool_id]->optname,
-		                                      &u32)) {
+		if (!nm_setting_option_get_uint32 (setting,
+		                                   nm_ethtool_data[ethtool_id]->optname,
+		                                   &u32)) {
 			NM_SET_OUT (out_is_default, TRUE);
 			return NULL;
 		}
 
-		return_str = g_strdup_printf ("%"G_GUINT32_FORMAT, u32);
+		return_str = nm_strdup_int (u32);
 		RETURN_STR_TO_FREE (return_str);
 	} else if (nm_ethtool_id_is_feature (ethtool_id)) {
 		const char *s;
-		NMTernary val;
+		gboolean val;
 
-		val = nm_setting_ethtool_get_feature (NM_SETTING_ETHTOOL (setting),
-		                                      nm_ethtool_data[ethtool_id]->optname);
-
-		if (val == NM_TERNARY_TRUE)
-			s = N_("on");
-		else if (val == NM_TERNARY_FALSE)
-			s = N_("off");
-		else {
-			s = NULL;
+		if (!nm_setting_option_get_boolean (setting,
+		                                    nm_ethtool_data[ethtool_id]->optname,
+		                                    &val)) {
 			NM_SET_OUT (out_is_default, TRUE);
+			return NULL;
 		}
 
-		if (s && get_type == NM_META_ACCESSOR_GET_TYPE_PRETTY)
+		s =   val
+		    ? N_("on")
+		    : N_("off");
+		if (get_type == NM_META_ACCESSOR_GET_TYPE_PRETTY)
 			s = gettext (s);
 		return s;
 	}
@@ -4153,9 +4151,9 @@ _set_fcn_ethtool (ARGS_SET_FCN)
 			return FALSE;
 		}
 
-		nm_setting_ethtool_set_coalesce (NM_SETTING_ETHTOOL (setting),
-		                                 nm_ethtool_data[ethtool_id]->optname,
-		                                 (guint32) i64);
+		nm_setting_option_set_uint32 (setting,
+		                              nm_ethtool_data[ethtool_id]->optname,
+		                              i64);
 		return TRUE;
 	}
 
@@ -4184,9 +4182,15 @@ _set_fcn_ethtool (ARGS_SET_FCN)
 		}
 
 set:
-		nm_setting_ethtool_set_feature (NM_SETTING_ETHTOOL (setting),
-	                                nm_ethtool_data[ethtool_id]->optname,
-	                                val);
+		if (val == NM_TERNARY_DEFAULT) {
+			nm_setting_option_set (setting,
+			                       nm_ethtool_data[ethtool_id]->optname,
+			                       NULL);
+		} else {
+			nm_setting_option_set_boolean (setting,
+			                               nm_ethtool_data[ethtool_id]->optname,
+			                               val);
+		}
 		return TRUE;
 	}
 
