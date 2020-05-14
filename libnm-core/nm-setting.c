@@ -2601,6 +2601,34 @@ _nm_setting_option_reset_from_hash (NMSetting *setting,
 	return TRUE;
 }
 
+void
+_nm_setting_option_clear_by_name (NMSetting *setting,
+                                  gboolean (*predicate) (const char *name))
+{
+	GHashTable *hash;
+	GHashTableIter iter;
+	const char *name;
+	gboolean changed = FALSE;
+
+	g_return_if_fail (NM_IS_SETTING (setting));
+	g_return_if_fail (predicate);
+
+	hash = _nm_setting_option_hash (NM_SETTING (setting), FALSE);
+	if (!hash)
+		return;
+
+	g_hash_table_iter_init (&iter, hash);
+	while (g_hash_table_iter_next (&iter, (gpointer *) &name, NULL)) {
+		if (predicate (name)) {
+			g_hash_table_iter_remove (&iter);
+			changed = TRUE;
+		}
+	}
+
+	if (changed)
+		_nm_setting_option_notify (setting, TRUE);
+}
+
 /*****************************************************************************/
 
 /**

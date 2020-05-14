@@ -328,6 +328,9 @@ void _nm_setting_option_to_gvalue (NMSetting *setting,
 
 GVariant *const*_nm_setting_option_get_all_values (NMSetting *setting);
 
+void _nm_setting_option_clear_by_name (NMSetting *setting,
+                                       gboolean (*predicate) (const char *name));
+
 /*****************************************************************************/
 
 guint nm_setting_ethtool_init_features (NMSettingEthtool *setting,
